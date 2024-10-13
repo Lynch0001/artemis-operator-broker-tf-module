@@ -1,0 +1,77 @@
+# Artemis Operator Broker Base Values file
+
+# namespace for Artemis Operator Broker
+namespace: ""
+# Broker config for Artemis Operator Broker
+broker:
+  image: quay.io/artemiscloud/activemq-artemis-broker-kubernetes:artemis.2.31.0
+  initImage: quay.io/artemiscloud/activemq-artemis-broker-init:artemis.2.31.0
+  replicas: 3
+  labels:
+  livenessProbe:
+    tcpSocket:
+      port: 62627
+    initialDelaySeconds: 15
+    periodSeconds: 10
+  readinessProbe:
+    tcpSocket:
+      port: 62627
+    initialDelaySeconds: 15
+    periodSeconds: 10
+  resources:
+    limits:
+      cpu: 500m
+      memory: 1024Mi
+    requests:
+      cpu: 250m
+      memory: 512Mi
+  storage:
+    size: "4Gi"
+  extraEnv:
+    - name: JDK_JAVA_OPTIONS
+      value: '-XshowSettings:system -Dlog4j2.disableJmx=false -Dcom.sun.management.jmxremote=true -Djava.rmi.server.hostname=0.0.0.0 -Dcom.sun.management.jmxremote.rmi.port=1099 -Dcom.sun.management.jmxremote.port=1099 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false'
+
+
+# Service config for Artemis Operator Broker
+service:
+  main:
+    enabled: true
+  metrics:
+    enabled: true
+  console0:
+    enabled: true
+  console1:
+    enabled: true
+  console2:
+    enabled: true
+
+#  Broker config for Artemis Operator Broker
+ingress:
+  host: test-host.some.domain
+  loadBalancer:
+
+# Secrets for Artemis Operator Broker
+secrets:
+  acceptor:
+    secretName: ssl-acceptor-secret
+    keystorePassword:
+    trustStorePassword:
+  admin:
+    user: admin
+    password: password
+
+# Metrics monitoring config for Artemis Operator Broker
+metrics:
+  port: console-jolokia
+  path: /metrics
+  interval: 15s
+
+# Logging config for Artemis Operator Broker
+logging:
+  level:
+    root: INFO
+    activemq: INFO
+    server: INFO
+    journal: ERROR
+    utils: INFO
+    authentication: INFO

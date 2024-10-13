@@ -1,0 +1,17 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: artemis-metrics
+  namespace: {{ .Release.Namespace }}
+spec:
+  endpoints:
+    - interval: {{ .Values.metrics.interval }}
+      port: {{ .Values.metrics.port }}
+      path: {{ .Values.metrics.path }}
+  namespaceSelector:
+    matchNames:
+      - {{ .Release.Namespace }}
+  selector:
+    matchLabels:
+      application: artemis-broker-tls-app
+

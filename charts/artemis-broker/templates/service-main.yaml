@@ -1,0 +1,24 @@
+{{ if .Values.service.main.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    application: xibus-artemis
+  name: artemis-main
+spec:
+  ports:
+    - port: 62627
+      protocol: TCP
+      targetPort: 62627
+      name: artemisSSL
+    - port: 1099
+      protocol: TCP
+      targetPort: 1099
+      name: jmx
+    - port: 8161
+      protocol: TCP
+      targetPort: 8161
+      name: console
+  selector:
+    application: xibus-artemis
+{{- end -}}
